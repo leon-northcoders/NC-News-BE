@@ -41,16 +41,18 @@ function seedArticles(data, topicsDocs, usersDocs){
 }
 
 function seedComments(articlesDocs, usersDocs){
-    const comments = Array.from({length:_.random(0, 10)}, () => {
-        return {
-            body: faker.hacker.phrase(),
-            belongs_to: _.sample(articlesDocs)._id,
-            created_at: faker.date.past().getTime(),
-            votes: _.random(-100, 100),
-            created_by: _.sample(usersDocs)._id
-        }
+    const comments = articlesDocs.map((article) => {
+        return Array.from({length:_.random(1, 10)}, () => {
+            return ({
+                body: faker.hacker.phrase(),
+                belongs_to: article._id,
+                created_at: faker.date.past().getTime(),
+                votes: _.random(-100, 100),
+                created_by: _.sample(usersDocs)._id
+            })
+        })
     })
-    return Comments.insertMany(comments)
+    return Comments.insertMany(_.flatten(comments))
 }
 
 

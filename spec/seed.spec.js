@@ -8,11 +8,12 @@ const { DB_URL, DATA_PATH } = require('../config');
 const { topicsData, usersData, articlesData } = require(`../seed${DATA_PATH}`);
 const seedDB = require('../seed/seed');
 
+// SEED TESTS ***************************************************
 describe('seed', () => {
-    let topics, users, articles;
+    let topics, users, articles, comments;
     beforeEach(() => {
         return seedDB(topicsData, usersData, articlesData)
-            .then(docs => [topics, users, articles] = docs);
+            .then(docs => [topics, users, articles, comments] = docs);
     });
     after(() => {
         return mongoose.disconnect();
