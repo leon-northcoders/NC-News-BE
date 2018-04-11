@@ -11,7 +11,7 @@ const ArticleSchema = new Schema({
     requied: true
   },
   belongs_to: {
-    type: mongoose.Types.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'topics',
     required: true
   },
@@ -21,9 +21,9 @@ const ArticleSchema = new Schema({
     default: 0
   },
   created_by: {
-    type: mongoose.Types.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
-    required: true
+    // required: true
   }
 });
 

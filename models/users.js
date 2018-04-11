@@ -5,16 +5,16 @@ const UserSchema = new Schema({
   username: {
     type: String,
     unique: true,
-    lowercase: true,
-    required: true
+    lowercase: true
+    // required: true
   },
   name: {
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
   avatar_url: {
-    type: String,
-    required: true
+    type: String
+    // required: true
   }
 });
 
