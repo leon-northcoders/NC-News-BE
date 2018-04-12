@@ -40,13 +40,7 @@ describe('seed', () => {
                 expect(articlesCount).to.be.a('number');
                 expect(articlesCount).to.not.equal(0)
             })
-        });
-        it('has something at a specific ID', () => {
-            const [mitch] = articles;
-            return Articles.findById(mitch._id).then(firstArticle => {
-              expect(firstArticle.body).to.equal('I find this existence challenging');
-            });
-        });    
+        });  
     });
     describe('comments', () => {
         it('seeds comments', () => {
