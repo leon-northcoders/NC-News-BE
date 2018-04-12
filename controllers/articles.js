@@ -6,28 +6,33 @@ exports.getArticles = (req, res, next) => {
     Articles.find()
         .populate('belongs_to')
         .populate('created_by')
-        .then(articles => res.send({ articles }))
+        .lean()
+        .then(articles => {
+            return Promise.all([articles, Comments.find()])
+        })
+        .then(([articles, comments]) => {
+        const articleIdAndCommentCountObj = comments.reduce((acc, comment) => {
+            acc[comment.belongs_to] = (acc[comment.belongs_to] || 0) + 1;
+            return acc;
+        }, {})
+        articles.forEach(article => {
+            article.comments = articleIdAndCommentCountObj[article._id] || 0
+        })
+        res.send({ articles })
+        })
+        .catch(next)
 }
 
 exports.getCommentsByArticleId = (req, res, next) => {
     // req.params = {belongs_to: (MongoID)}
     Comments.find(req.params)
-        .populate({
-            path: 'belongs_to',
-            populate: {
-                path: 'belongs_to',
-                model: 'topics', 
-            }
-        })
-        .populate({    
-            path: 'belongs_to',
-            populate: {
-                path: 'created_by',
-                model: 'users'
-            }     
-        })
+        .populate('belongs_to')
         .populate('created_by')
         .then(comments => res.send({ comments }))
+        .catch(err => {
+            if(err.name === 'CastError') next({ status: 400 })
+            else next(err)
+        })
 }
 
 exports.addCommentToArticle = (req, res, next) => {
@@ -42,25 +47,16 @@ exports.addCommentToArticle = (req, res, next) => {
         })
         .then(comment => {
     return Comments.findOne({ _id: comment._id })
-            .populate({
-                path: 'belongs_to',
-                populate: {
-                    path: 'belongs_to',
-                    model: 'topics', 
-                }
-            })
-            .populate({    
-                path: 'belongs_to',
-                populate: {
-                    path: 'created_by',
-                    model: 'users'
-                }     
-            })
+            .populate('belongs_to')
             .populate('created_by')
         })
         .then(comment =>{
             res.status(201).send({ comment })
-    })
+        })
+        .catch(err => {
+            if(err.name === 'ValidationError') next({ status: 400 })
+            else next(err)
+        })
 }
 
 exports.voteOnArticle = (req, res, next) => {
@@ -68,5 +64,9 @@ exports.voteOnArticle = (req, res, next) => {
     const { article_id } = req.params;
     const inc = VOTE === 'UP' ? 1 : VOTE === 'DOWN' ? -1 : 0;
     return Articles.findByIdAndUpdate(article_id, { $inc: {votes: inc} }, { new: true })
-            .then(article => res.send({ article }))  
+        .then(article => res.send({ article }))  
+        .catch(err => {
+            if(err.name === 'CastError') next({ status: 400 })
+            else next(err)
+        })
 }

@@ -6,6 +6,10 @@ exports.voteOnComment = (req, res, next) => {
     const inc = VOTE === 'UP' ? 1 : VOTE === 'DOWN' ? -1 : 0;
     return Comments.findByIdAndUpdate(comment_id, { $inc: {votes: inc} }, { new: true })
         .then(comment => res.send({ comment }))
+        .catch(err => {
+            if(err.name === 'CastError') next({ status: 400 })
+            else next(err)
+        })
 }
 
 exports.deleteComment = (req, res, next) => {
@@ -16,5 +20,9 @@ exports.deleteComment = (req, res, next) => {
             next({ status: 404 })
             else
             res.status(202).send({ message:'Delete successful'})
+        })
+        .catch(err => {
+            if(err.name === 'CastError') next({ status: 400 })
+            else next(err)
         })
 }

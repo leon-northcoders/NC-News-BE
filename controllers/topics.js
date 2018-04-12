@@ -4,6 +4,7 @@ const _ = require('lodash');
 exports.getTopics = (req, res, next) => {
     Topics.find()
         .then(topics => res.send({ topics }))
+        .catch(next)
 }
 
 exports.getArticlesByTopicId = (req, res, next) => {
@@ -12,6 +13,10 @@ exports.getArticlesByTopicId = (req, res, next) => {
         .populate('belongs_to')
         .populate('created_by')
         .then(articles => res.send({ articles }))
+        .catch(err => {
+            if(err.name === 'CastError') next({ status: 400 })
+            else next(err)
+        })
 }
 
 exports.addArticleToTopic = (req, res, next) => {
@@ -29,5 +34,9 @@ exports.addArticleToTopic = (req, res, next) => {
         })    
         .then((article) => {   
             res.status(201).send({ article }) 
-    })
+        })
+        .catch(err => {
+            if(err.name === 'ValidationError') next({ status: 400 })
+            else next(err)
+        })
 }

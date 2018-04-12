@@ -13,6 +13,11 @@ mongoose.connect(DB_URL)
 
 app.use(bodyParser.json());
 app.use('/api', apiRouter)
+app.set('view engine', 'html')
+app.use(express.static(__dirname + '/public'))
+app.get('/', (req, res, next) => {
+    res.render('index');
+});
 
 app.use('/*', (req, res, next) => next({ status: 404 }));
 

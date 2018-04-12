@@ -33,6 +33,15 @@ describe('/api', () => {
                     expect(topics.length).to.equal(2)
                 })
             })
+        it('[ErrHan] /topics', () => {
+            return request
+                .get('/api/topiccs')
+                .expect(404)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('404: Page Not Found.')
+                })
+            })
         it('GET /topics/:belongs_to/articles', () => {
             return request
                 .get(`/api/topics/${topics[0]._id}/articles`)
@@ -45,6 +54,15 @@ describe('/api', () => {
                     expect(articles[0].title).to.equal("Living in the shadow of a great man")
                 })
             })
+        it('[ErrHan] /topics/:belongs_to/articles', () => {
+            return request
+                .get('/api/topics/ejfjefbejhbfhjebfj/articles')
+                .expect(400)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('400: Bad Request.')
+                })
+            })    
         it('POST /topics/:topic_id/articles', () => {
             const newArticle = { 
                 "title": "this is my new article title",
@@ -62,6 +80,20 @@ describe('/api', () => {
                 expect(article.body).to.equal(newArticle.body)
             })
         }) 
+        it('[ErrHan] /topics/:topic_id/articles', () => {
+            const newArticle = { 
+                "title": "this is my new article title",
+                "body": "This is my new article content"
+            }
+            return request
+            .post(`/api/topics/ffrfrfrfgegegerfgtg/articles`)
+            .send(newArticle)
+            .expect(400)
+            .then(res => {
+                const { message } = res.body
+                expect(message).to.equal('400: Bad Request.')
+            })
+        }) 
     })
     // ARTICLES ************************************************        
     describe('/articles', () => {
@@ -76,6 +108,15 @@ describe('/api', () => {
                     expect(articles.length).to.equal(4)
                 })
         })
+        it('[ErrHan] /articles', () => {
+            return request
+                .get('/api/articless')
+                .expect(404)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('404: Page Not Found.')
+                })
+            })
         it('GET /articles/:belongs_to/comments', () => {
             return request
                 .get(`/api/articles/${articles[2]._id}/comments`)
@@ -86,6 +127,15 @@ describe('/api', () => {
                     expect(res.body).to.have.all.keys('comments')
                 })
         })
+        it('[ErrHan] /articles/:belongs_to/comments', () => {
+            return request
+                .get('/api/articles/ejfjefbejhbfhjebfj/comments')
+                .expect(400)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('400: Bad Request.')
+                })
+            })  
         it('POST /articles/:articles_id/comments', () => {
             const newComment = {
                 "body": "This is my new comment"
@@ -100,6 +150,19 @@ describe('/api', () => {
                 expect(res.body).to.have.all.keys('comment')
                 expect(comment.body).to.equal(newComment.body)
                 })
+        }) 
+        it('[ErrHan] /articles/:articles_id/comments', () => {
+            const newComment = {
+                "body": "This is my new comment"
+            }
+            return request
+            .post(`/api/articles/deedefrgefergerevreg/comments`)
+            .send(newComment)
+            .expect(400)
+            .then(res => {
+                const { message } = res.body
+                expect(message).to.equal('400: Bad Request.')
+            })
         }) 
         it('PUT /articles/:articles_id', () => {
             return request
@@ -121,6 +184,15 @@ describe('/api', () => {
                 expect(res.body.article.votes).to.equal(articles[0].votes)
             })
         }) 
+        it('[ErrHan] /articles/:articles_id', () => {
+            return request
+                .put('/api/articles/ffrfefefrefefre')
+                .expect(400)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('400: Bad Request.')
+                })
+        })
     })
     // COMMENTS ************************************************
     describe('/comments', () => {
@@ -144,22 +216,39 @@ describe('/api', () => {
                 expect(res.body.comment.votes).to.equal(comments[0].votes)
             })
         }) 
+        it('[ErrHan] /comments/:comments_id', () => {
+            return request
+                .put('/api/comments/ffrfefefrefefre')
+                .expect(400)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('400: Bad Request.')
+                })
+        })
         it('DELETE /comments/:comment_id', () => {
             return request
             .delete(`/api/comments/${comments[0]._id}`)
             .expect(202)
             .then(res => {
                 expect(res.body.message).to.equal('Delete successful')
+                return request
+                .delete(`/api/comments/${comments[0]._id}`)
+                .expect(404)
             })
-            return request
-            .delete(`/api/comments/${comments[0]._id}`)
-            .expect(404)
             .then(res => {
                 expect(res.body.message).to.equal('404: Page Not Found.')
             })
         })
+        it('[ErrHan] /comments/:comment_id', () => {
+            return request
+            .delete(`/api/comments/frfrfrfegrtgrgtrghtg`)
+            .expect(400)
+            .then(res => {
+                expect(res.body.message).to.equal('400: Bad Request.')
+            })
+        })
     })
-    // COMMENTS ************************************************
+    // USERS ************************************************
     describe('/users', () => {
         it('GET /users/:usernames', () => {
             return request
@@ -170,6 +259,14 @@ describe('/api', () => {
                 expect(user).to.be.an('object')
                 expect(res.body).to.have.all.keys('user')
                 expect(user.name).to.equal('jonny')
+            })
+        })
+        it('[ErrHan] /users/:usernames', () => {
+            return request
+            .get(`/api/users/ferferggvegrge`)
+            .expect(400)
+            .then(res => {
+                expect(res.body.message).to.equal('400: Bad Request.')
             })
         })
     })
