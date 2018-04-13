@@ -28,7 +28,11 @@ exports.getCommentsByArticleId = (req, res, next) => {
     Comments.find(req.params)
         .populate('belongs_to')
         .populate('created_by')
-        .then(comments => res.send({ comments }))
+        .then(comments => {
+            if(!comments.length) next({ status: 404 })
+            else
+            res.send({ comments })
+        })    
         .catch(err => {
             if(err.name === 'CastError') next({ status: 400 })
             else next(err)
@@ -36,17 +40,22 @@ exports.getCommentsByArticleId = (req, res, next) => {
 }
 
 exports.addCommentToArticle = (req, res, next) => {
-    req.body.belongs_to = req.params.article_id
     req.body.created_at = new Date().getTime()
     req.body.votes = _.random(-100, 100);
     
     Users.findOne()
         .then(user => {
             req.body.created_by = req.body.created_by || user._id
-    return Comments.create(req.body)
+            return Articles.findOne({_id: req.params.article_id})
+        })
+        .then(article => {
+            if(article === null) return Promise.reject({ status: 404 })
+            else 
+            req.body.belongs_to = req.params.article_id
+            return Comments.create(req.body)
         })
         .then(comment => {
-    return Comments.findOne({ _id: comment._id })
+            return Comments.findById(comment._id)
             .populate('belongs_to')
             .populate('created_by')
         })
@@ -54,7 +63,8 @@ exports.addCommentToArticle = (req, res, next) => {
             res.status(201).send({ comment })
         })
         .catch(err => {
-            if(err.name === 'ValidationError') next({ status: 400 })
+            if(err.name === 'CastError') next({ status: 400 })
+            else if(err.name === 'ValidationError') next({ status: 400 })
             else next(err)
         })
 }
@@ -64,7 +74,11 @@ exports.voteOnArticle = (req, res, next) => {
     const { article_id } = req.params;
     const inc = VOTE === 'UP' ? 1 : VOTE === 'DOWN' ? -1 : 0;
     return Articles.findByIdAndUpdate(article_id, { $inc: {votes: inc} }, { new: true })
-        .then(article => res.send({ article }))  
+        .then(article => {
+            if(article === null) next({ status: 404 })
+            else 
+            res.send({ article })
+        })  
         .catch(err => {
             if(err.name === 'CastError') next({ status: 400 })
             else next(err)

@@ -5,7 +5,11 @@ exports.voteOnComment = (req, res, next) => {
     const { comment_id } = req.params;
     const inc = VOTE === 'UP' ? 1 : VOTE === 'DOWN' ? -1 : 0;
     return Comments.findByIdAndUpdate(comment_id, { $inc: {votes: inc} }, { new: true })
-        .then(comment => res.send({ comment }))
+        .then(comment => {
+            if(comment === null) next({ status: 404 })
+            else
+            res.send({ comment })
+        })
         .catch(err => {
             if(err.name === 'CastError') next({ status: 400 })
             else next(err)
@@ -16,8 +20,7 @@ exports.deleteComment = (req, res, next) => {
     const { comment_id } = req.params
     Comments.findByIdAndRemove(comment_id)
         .then(complete => {
-            if(complete === null)
-            next({ status: 404 })
+            if(complete === null) next({ status: 404 })
             else
             res.status(202).send({ message:'Delete successful'})
         })

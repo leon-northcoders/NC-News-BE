@@ -33,7 +33,7 @@ describe('/api', () => {
                     expect(topics.length).to.equal(2)
                 })
             })
-        it('[ErrHan] /topics', () => {
+        it('[ErrHan] Mispell url /topics', () => {
             return request
                 .get('/api/topiccs')
                 .expect(404)
@@ -54,7 +54,7 @@ describe('/api', () => {
                     expect(articles[0].title).to.equal("Living in the shadow of a great man")
                 })
             })
-        it('[ErrHan] /topics/:belongs_to/articles', () => {
+        it('[ErrHan] Invalid id /topics/:belongs_to/articles', () => {
             return request
                 .get('/api/topics/ejfjefbejhbfhjebfj/articles')
                 .expect(400)
@@ -62,7 +62,16 @@ describe('/api', () => {
                     const { message } = res.body
                     expect(message).to.equal('400: Bad Request.')
                 })
-            })    
+            }) 
+        it('[ErrHan] Incorrect valid id /topics/:belongs_to/articles', () => {
+            return request
+                .get(`/api/topics/${articles[0]._id}/articles`)
+                .expect(404)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('404: Page Not Found.')
+                })
+            })  
         it('POST /topics/:topic_id/articles', () => {
             const newArticle = { 
                 "title": "this is my new article title",
@@ -80,7 +89,7 @@ describe('/api', () => {
                 expect(article.body).to.equal(newArticle.body)
             })
         }) 
-        it('[ErrHan] /topics/:topic_id/articles', () => {
+        it('[ErrHan] Invalid id /topics/:topic_id/articles', () => {
             const newArticle = { 
                 "title": "this is my new article title",
                 "body": "This is my new article content"
@@ -92,6 +101,20 @@ describe('/api', () => {
             .then(res => {
                 const { message } = res.body
                 expect(message).to.equal('400: Bad Request.')
+            })
+        }) 
+        it('[ErrHan] Incorrect valid id /topics/:topic_id/articles', () => {
+            const newArticle = { 
+                "title": "this is my new article title",
+                "body": "This is my new article content"
+            }
+            return request
+            .post(`/api/topics/${articles[0]._id}/articles`)
+            .send(newArticle)
+            .expect(404)
+            .then(res => {
+                const { message } = res.body
+                expect(message).to.equal('404: Page Not Found.')
             })
         }) 
     })
@@ -108,7 +131,7 @@ describe('/api', () => {
                     expect(articles.length).to.equal(4)
                 })
         })
-        it('[ErrHan] /articles', () => {
+        it('[ErrHan] Mispell url /articles', () => {
             return request
                 .get('/api/articless')
                 .expect(404)
@@ -127,7 +150,7 @@ describe('/api', () => {
                     expect(res.body).to.have.all.keys('comments')
                 })
         })
-        it('[ErrHan] /articles/:belongs_to/comments', () => {
+        it('[ErrHan] Invalid id /articles/:belongs_to/comments', () => {
             return request
                 .get('/api/articles/ejfjefbejhbfhjebfj/comments')
                 .expect(400)
@@ -135,7 +158,16 @@ describe('/api', () => {
                     const { message } = res.body
                     expect(message).to.equal('400: Bad Request.')
                 })
-            })  
+            }) 
+        it('[ErrHan] Incorrect valid id /articles/:belongs_to/comments', () => {
+            return request
+                .get(`/api/articles/${comments[0]._id}/comments`)
+                .expect(404)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('404: Page Not Found.')
+                })
+            })   
         it('POST /articles/:articles_id/comments', () => {
             const newComment = {
                 "body": "This is my new comment"
@@ -151,7 +183,7 @@ describe('/api', () => {
                 expect(comment.body).to.equal(newComment.body)
                 })
         }) 
-        it('[ErrHan] /articles/:articles_id/comments', () => {
+        it('[ErrHan] Invalid id /articles/:articles_id/comments', () => {
             const newComment = {
                 "body": "This is my new comment"
             }
@@ -162,6 +194,19 @@ describe('/api', () => {
             .then(res => {
                 const { message } = res.body
                 expect(message).to.equal('400: Bad Request.')
+            })
+        }) 
+        it('[ErrHan] Incorrect valid id /articles/:articles_id/comments', () => {
+            const newComment = {
+                "body": "This is my new comment"
+            }
+            return request
+            .post(`/api/articles/${topics[0]._id}/comments`)
+            .send(newComment)
+            .expect(404)
+            .then(res => {
+                const { message } = res.body
+                expect(message).to.equal('404: Page Not Found.')
             })
         }) 
         it('PUT /articles/:articles_id', () => {
@@ -184,13 +229,22 @@ describe('/api', () => {
                 expect(res.body.article.votes).to.equal(articles[0].votes)
             })
         }) 
-        it('[ErrHan] /articles/:articles_id', () => {
+        it('[ErrHan] Invalid id /articles/:articles_id', () => {
             return request
                 .put('/api/articles/ffrfefefrefefre')
                 .expect(400)
                 .then(res => {
                     const { message } = res.body
                     expect(message).to.equal('400: Bad Request.')
+                })
+        })
+        it('[ErrHan] Incorrect valid id /articles/:articles_id', () => {
+            return request
+                .put(`/api/articles/${topics[0]._id}?VOTE=UP`)
+                .expect(404)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('404: Page Not Found.')
                 })
         })
     })
@@ -216,13 +270,22 @@ describe('/api', () => {
                 expect(res.body.comment.votes).to.equal(comments[0].votes)
             })
         }) 
-        it('[ErrHan] /comments/:comments_id', () => {
+        it('[ErrHan] Invald id /comments/:comments_id', () => {
             return request
                 .put('/api/comments/ffrfefefrefefre')
                 .expect(400)
                 .then(res => {
                     const { message } = res.body
                     expect(message).to.equal('400: Bad Request.')
+                })
+        })
+        it('[ErrHan] Incorrect valid id /comments/:comment_id', () => {
+            return request
+                .put(`/api/comments/${topics[0]._id}?VOTE=UP`)
+                .expect(404)
+                .then(res => {
+                    const { message } = res.body
+                    expect(message).to.equal('404: Page Not Found.')
                 })
         })
         it('DELETE /comments/:comment_id', () => {
@@ -239,12 +302,20 @@ describe('/api', () => {
                 expect(res.body.message).to.equal('404: Page Not Found.')
             })
         })
-        it('[ErrHan] /comments/:comment_id', () => {
+        it('[ErrHan] Invalid id /comments/:comment_id', () => {
             return request
             .delete(`/api/comments/frfrfrfegrtgrgtrghtg`)
             .expect(400)
             .then(res => {
                 expect(res.body.message).to.equal('400: Bad Request.')
+            })
+        })
+        it('[ErrHan] Incorrect valid id /comments/:comment_id', () => {
+            return request
+            .delete(`/api/comments/${topics[0]._id}`)
+            .expect(404)
+            .then(res => {
+                expect(res.body.message).to.equal('404: Page Not Found.')
             })
         })
     })
