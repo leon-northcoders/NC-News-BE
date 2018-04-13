@@ -39,7 +39,7 @@ npm t
 ```
 npm run dev
 ```
-2. To access your app within a browser or Postman, visit:
+2. To access your app within a browser or [Postman](https://www.getpostman.com), visit:
 ```
 http://localhost:9090/
 ```
