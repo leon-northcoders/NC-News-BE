@@ -63,7 +63,7 @@ npm run seed:prod
 * Update the URL with the user and password and add it to your config files
 
 ### Heroku
-1. Create account for [Heroku](https://heroku.com/)
+1. Create a project on [Heroku](https://heroku.com/)
 ```
 heroku create
 ```
