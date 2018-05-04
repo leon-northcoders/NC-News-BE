@@ -55,34 +55,6 @@ npm run seed:dev
 npm run seed:prod
 ```
 
-## Deployment
-### Mlab
-* Create an account on [MLab](https://mlab.com/)
-* Create a new database
-* Create a user for the DB
-* Update the URL with the user and password and add it to your config files
-
-### Heroku
-1. Create a project on [Heroku](https://heroku.com/)
-```
-heroku create
-```
-2. Set the DB_URL for the heroku config variables:
-```
-heroku config:set DB_URL=[Mlab-db-url]
-```
-3. Then deploy the app using:
-```
-git push heroku master
-```
-
-View the app:
-```
-heroku open
-```
-View logs and errors:
-```
-heroku logs --tail
 ```
 ## Author
 * ### [leondelaimy](https://github.com/leondelaimy)

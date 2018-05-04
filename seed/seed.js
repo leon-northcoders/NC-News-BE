@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const faker = require('faker');
 const _ = require('lodash');
 const { DB_URL, DATA_PATH } = require('../config');
-mongoose.Promise = Promise;
 const { Topics, Articles, Users, Comments } = require('../models');
 const { topicsData, usersData, articlesData } = require(`.${DATA_PATH}`);
 
@@ -15,8 +14,7 @@ function seedDB (topics, users, articles){
             return Promise.all([topicsDocs, usersDocs, seedArticles(articles, topicsDocs, usersDocs)])
         }).then(([topicsDocs, usersDocs, articlesDocs])=> {
             return Promise.all([topicsDocs, usersDocs, articlesDocs, seedComments(articlesDocs, usersDocs)])
-        })
-        .catch(console.log)    
+        })   
 }
 
 function seedTopics(data){

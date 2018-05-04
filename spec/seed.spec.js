@@ -11,7 +11,7 @@ const seedDB = require('../seed/seed');
 // SEED TESTS ***************************************************
 describe('seed', () => {
     let topics, users, articles, comments;
-    beforeEach(() => {
+    before(() => {
         return seedDB(topicsData, usersData, articlesData)
             .then(docs => [topics, users, articles, comments] = docs);
     });
@@ -22,7 +22,7 @@ describe('seed', () => {
         it('seeds topics', () => {
             return Topics.count().then(topicsCount => {
                 expect(topicsCount).to.be.a('number');
-                expect(topicsCount).to.not.equal(0)
+                expect(topicsCount).to.equal(2)
             })
         });
     });
@@ -30,7 +30,7 @@ describe('seed', () => {
         it('seeds users', () => {
             return Users.count().then(usersCount => {
                 expect(usersCount).to.be.a('number');
-                expect(usersCount).to.not.equal(0)
+                expect(usersCount).to.equal(2)
             })
         });
     });
@@ -38,7 +38,7 @@ describe('seed', () => {
         it('seeds articles', () => {
             return Articles.count().then(articlesCount => {
                 expect(articlesCount).to.be.a('number');
-                expect(articlesCount).to.not.equal(0)
+                expect(articlesCount).to.equal(4)
             })
         });  
     });

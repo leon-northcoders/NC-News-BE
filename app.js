@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const apiRouter = require('./routes/api');
+const cors = require('cors');
 const DB_URL = process.env.DB_URL || require('./config').DB_URL;
 mongoose.Promise = Promise;
 
@@ -10,7 +11,7 @@ mongoose.connect(DB_URL)
     .then(() => {
         console.log(`connected to  ${DB_URL}`)
     })
-
+app.use(cors())
 app.use(bodyParser.json());
 app.use('/api', apiRouter)
 app.set('view engine', 'html')

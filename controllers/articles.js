@@ -41,7 +41,6 @@ exports.getCommentsByArticleId = (req, res, next) => {
 
 exports.addCommentToArticle = (req, res, next) => {
     req.body.created_at = new Date().getTime()
-    req.body.votes = _.random(-100, 100);
     
     Users.findOne()
         .then(user => {

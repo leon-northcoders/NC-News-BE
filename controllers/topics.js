@@ -1,5 +1,3 @@
-
-
 const { Topics, Articles, Users, Comments } = require('../models');
 const _ = require('lodash');
 
