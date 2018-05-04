@@ -41,7 +41,7 @@ exports.getCommentsByArticleId = (req, res, next) => {
 
 exports.addCommentToArticle = (req, res, next) => {
     req.body.created_at = new Date().getTime()
-    const { created_by = {} } = req.body;
+    const { created_by } = req.body;
     Users.findOne({ created_by })
         .then(user => {
             req.body.created_by = req.body.created_by || user._id
