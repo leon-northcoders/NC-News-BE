@@ -1,5 +1,11 @@
 [
   {
+    "username": "Guest",
+    "name": "Guest",
+    "avatar_url":
+      "https://cdn-images-1.medium.com/max/1200/1*LdnSztHVYhhd8K8EqlgCJQ.png"
+  },
+  {
     "username": "tickle122",
     "name": "Tom Tickle",
     "avatar_url":
@@ -19,13 +25,13 @@
   {
     "username": "cooljmessy",
     "name": "Peter Messy",
-    "avatar_url": "http://i.imgur.com/WfX0Neu.jpg"
+    "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/1/1c/Mr-messy-3a.PNG/revision/latest?cb=20170730170827"
   },
   {
     "username": "weegembump",
     "name": "Gemma Bump",
     "avatar_url":
-      "http://www.upandrunning.co.uk/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/m/r/mr-bump.jpg"
+      "https://weirdspace.dk/RogerHargreaves/Graphics/MrBump.gif"
   },
   {
     "username": "jessjelly",
