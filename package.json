@@ -28,11 +28,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leondelaimy/BE-FT-northcoders-news.git"
+    "url": "git+https://github.com/leondelaimy/NC-News-BE.git"
   },
   "keywords": [],
   "bugs": {
-    "url": "https://github.com/leondelaimy/BE-FT-northcoders-news/issues"
+    "url": "https://github.com/leondelaimy/NC-News-BE.git/issues"
   },
-  "homepage": "https://github.com/leondelaimy/BE-FT-northcoders-news#readme"
+  "homepage": "https://github.com/leondelaimy/NC-News-BE.git#readme"
 }
