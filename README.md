@@ -44,7 +44,6 @@ npm run dev
 http://localhost:9090/
 ```
 3. From there you can browse a list of all of the available API endpoints.
-
 ## Seeding the databases
 
 1. To seed the development database:
@@ -56,6 +55,5 @@ npm run seed:dev
 npm run seed:prod
 ```
 
-```
 ## Author
-* ### [leondelaimy](https://github.com/leondelaimy)
+### [leondelaimy](https://github.com/leondelaimy)
