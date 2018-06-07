@@ -5,7 +5,7 @@ This project provides access to Northcoders news, articles, users and comments.
 
 Link below displays all of the available ***API Endpoints***
 
-* Link to NC-News API - https://leon-nc-news.herokuapp.com
+* Link to NC-News API - https://nc-news-leon-be.herokuapp.com
 
 ## Prerequisites
 This application was built with JavaScript and uses:
