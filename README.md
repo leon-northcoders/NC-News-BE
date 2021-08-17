@@ -76,6 +76,3 @@ npm run seed:dev
 ```
 npm run seed:prod
 ```
-
-## Author
-### [leondelaimy](https://github.com/leondelaimy)
